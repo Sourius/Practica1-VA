@@ -13,6 +13,7 @@ import matplotlib.pyplot as plt
 from colorsys import hsv_to_rgb
 from random import random
 
+"""
 ret, umbralizado = cv2.threshold(img,127,255,cv2.THRESH_BINARY)
 plt.imshow(umbralizado,cmap='gray')
 plt.show()
@@ -28,7 +29,7 @@ for contour in contours:
     cv2.rectangle(img_color,(x,y),(x+w,y+h),(255,0,0),2)
     plt.imshow(img_color)
     plt.show()
-
+"""
 original = cv2.imread('00009.ppm',1)
 img = cv2.imread('00009.ppm',0)
 img_color = cv2.cvtColor(original.copy(), cv2.COLOR_BGR2RGB)
