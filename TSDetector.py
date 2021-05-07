@@ -25,7 +25,6 @@ class TSDetector:
 
     # inicializar las mascaras medias
     def setMasks(self, kernel):
-        self.kernel = kernel;
         # danger, prohibition, stop
         self.avg_pmask = AverageMask(kernel, TSType.PROHIBICION, self.dim_x, self.dim_y);
         self.avg_dmask = AverageMask(kernel, TSType.PELIGRO, self.dim_x, self.dim_y);
@@ -38,7 +37,6 @@ class TSDetector:
 
     def __loadLearningImages(self, dir_path, tipo):
         # obtener lista de ficheros
-        dir_path = 'train_recortadas/' + dir_path
         ficheros = os.listdir(dir_path)
         for fichero in ficheros:
             # obtener la ruta de la imagen
@@ -57,8 +55,8 @@ class TSDetector:
                 elif tipo == int(self.avg_smask.getType().value):
                     self.avg_smask.add_learning_image(resized_image);
 
-    # carga las imagenes segun el <fichero>.txt y genera la mascara media de las tres señales
-    def generateAverageMasks(self, file_path):
+    # carga las imagenes segun el entradas.txt y genera la mascara media de las tres señales
+    def generateAverageMasks(self, dir_path, file_path):
         # leer del fichero txt
         f = open(file_path, mode='r', encoding='utf-8')
         # leer lineas
@@ -66,10 +64,9 @@ class TSDetector:
             # obtener tipo
             ficheros = line.split(";")
             tipo = ficheros[0]
-            # añadir imagenes de aprendizaje
+            # añadir imagenes de aprendizaje de cada directorio especificado en entrada.txt
             for i in range(1, len(ficheros)):
-                # leer la ruta de cada fichero
-                file_path = ficheros[i].strip()
+                file_path = os.path.join(dir_path, ficheros[i].strip())
                 self.__loadLearningImages(file_path, tipo)
 
         # calcular mascara media
@@ -120,33 +117,42 @@ class TSDetector:
         return (region_grande[0] <= centro_peq[0] <= region_grande[1]) and (
                     region_grande[2] <= centro_peq[1] <= region_grande[3])
 
-    # detectar señales apartir de un directorio y guardar las detecciones en un atributo
+    # detectar señales apartir de un directorio y guardar las detecciones
     def detectar_señales_directorio(self, dir_imagenes):
+        # obtener lista de ficheros
         imagenes_test = os.listdir(dir_imagenes)
-        output_file = open("salida.txt", "w")
+        
+        # guardar detecciones
+        output_file = open(Constants.RESULTS_FILE, "w")
+        output_type_file = open(Constants.RESULTS_TYPE_FILE, "w")
+        
+        # detectar las señales de cada imagen, generar salida y marcar la detección
         for imagen in imagenes_test:
-            # obtener la ruta de la imagen
+            # obtener la imagen
             image_path = os.path.join(dir_imagenes, imagen)
+            
             if os.path.isfile(image_path) and image_path.endswith('.jpg'):
+                # detectar señales
                 detecciones = self.detectar_señales(image_path)
+                
+                # abrir imagenes
                 img = cv2.imread(image_path, 1)
-                img_color = cv2.cvtColor(img.copy(), cv2.COLOR_BGR2RGB)
                 img_color_rectangle = img.copy()
+                
                 for ts in detecciones:
                     upper_left, lower_right = ts.getCorners()
+                    # marcar la deteccion
                     img_color_rectangle = cv2.rectangle(img_color_rectangle, upper_left, lower_right, (0,0,255), 4)
-                    output_file.write(ts.getResult()+'\n')
-                    #print(ts.getResult())
-                    #y1, y2, x1, x2 = ts.getRegion()
-                    #plt.title(ts.getResult())
-                    #plt.imshow(img_color[y1:y2, x1:x2])
-                    #plt.show()
+                    # guardar detecciones
+                    output_file.write(ts.getResult())
+                    output_type_file.write(ts.getTypeResult())
+                
+                # guardar imagen con detecciones marcadas
                 image_save_dir = os.path.join(Constants.RESULTS_DIR, os.path.basename(image_path))
-                #print('guardando en ', image_save_dir)
                 cv2.imwrite(image_save_dir, img_color_rectangle)
+        
         output_file.close()
-
-    # generar resultado --> ap 5
+        output_type_file.close()
 
     # detecta señales de una imagen y devuelve las señales detectadas en un diccionario
     def detectar_señales(self, img_path):
@@ -155,8 +161,7 @@ class TSDetector:
         img_gray = cv2.cvtColor(img_color.copy(), cv2.COLOR_BGR2GRAY)
         img_eq = cv2.equalizeHist(img_gray)
         img_mser, interest_regions = self.mser.applyMser(img_eq)
-
-        # utilizar diccionario --> guardar señal segun el tipo de señal
+        
         detecciones = [];
         for region in interest_regions:
             y1, y2, x1, x2 = region

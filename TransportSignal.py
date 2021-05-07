@@ -44,8 +44,12 @@ class TransportSignal:
             self.region = region
 
     def getResult(self):
-        # devolver resultado como nos pide en el enunciado
+        # devolver resultado
+        y1, y2, x1, x2 = self.getRegion();
+        return self.image + ";" + str(x1) + ";" + str(y1) + ";" + str(x2) + ";" + str(y2) + ";1;" + str(round(self.getRating()*100, 2))
 
+    def getTypeResult(self):
+        # devolver resultado por tipo
         y1, y2, x1, x2 = self.getRegion();
         return self.image + ";" + str(x1) + ";" + str(y1) + ";" + str(x2) + ";" + str(y2) + ";" + str(
             self.getType()) + ";" + str(round(self.getRating()*100, 2))
