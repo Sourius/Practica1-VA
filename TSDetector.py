@@ -9,6 +9,7 @@ from TransportSignal import TransportSignal
 import matplotlib.pyplot as plt
 from PIL import Image
 import Constants
+from ProgressBar import printProgressBar
 
 
 class TSDetector:
@@ -74,8 +75,14 @@ class TSDetector:
 
         # calcular mascara media
         self.avg_dmask.generateAVGMask();  # peligro
+        #plt.imshow(self.avg_dmask.getValue())
+        #plt.show()
         self.avg_pmask.generateAVGMask();  # prohibición
+        #plt.imshow(self.avg_pmask.getValue())
+        #plt.show()
         self.avg_smask.generateAVGMask();  # stop
+        #plt.imshow(self.avg_smask.getValue())
+        #plt.show()
         f.close();
 
     # calcular area
@@ -124,7 +131,11 @@ class TSDetector:
     def detectar_señales_directorio(self, dir_imagenes):
         imagenes_test = os.listdir(dir_imagenes)
         output_file = open("salida.txt", "w")
+        i = 0
+        total = len(imagenes_test)
         for imagen in imagenes_test:
+            i += 1
+            printProgressBar(i, total, prefix='Progreso:', suffix='completado', length=50)
             # obtener la ruta de la imagen
             image_path = os.path.join(dir_imagenes, imagen)
             if os.path.isfile(image_path) and image_path.endswith('.jpg'):
@@ -145,7 +156,6 @@ class TSDetector:
                 #print('guardando en ', image_save_dir)
                 cv2.imwrite(image_save_dir, img_color_rectangle)
         output_file.close()
-
     # generar resultado --> ap 5
 
     # detecta señales de una imagen y devuelve las señales detectadas en un diccionario

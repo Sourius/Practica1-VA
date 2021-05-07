@@ -16,9 +16,13 @@ class MaskMaker:
         # H 0 a 10 y 160 a 180 en openCV
         # S >= 40
         # V >= 30
-        self.addHSVRange(np.array([0, 25, 0]), np.array([10, 125, 50]));
-        self.addHSVRange(np.array([150, 50, 30]), np.array([180, 255, 255]));
-        self.addHSVRange(np.array([0, 70, 30]), np.array([10, 255, 255]));
+        #COLORES MAS RESTRICTIVOS:
+        #self.addHSVRange(np.array([0, 25, 0]), np.array([10, 125, 50]));
+        #self.addHSVRange(np.array([150, 50, 30]), np.array([180, 255, 255]));
+        #self.addHSVRange(np.array([0, 70, 30]), np.array([10, 255, 255]));
+        #COLORES MAS ADMISIVOS:
+        self.addHSVRange(np.array([150, 0, 0]), np.array([180, 255, 255]));
+        self.addHSVRange(np.array([0, 0, 0]), np.array([10, 255, 255]));
 
     def addHSVRange(self, low_range, high_range):
         self.ranges.append((low_range, high_range));

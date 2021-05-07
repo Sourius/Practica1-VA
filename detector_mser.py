@@ -32,6 +32,9 @@ kernel = cv2.getStructuringElement(cv2.MORPH_RECT, Constants.KERNEL_SIZE)
 detector.setMasks(kernel)
 
 # generar mascaras medias
+print("Entrenando...")
 detector.generateAverageMasks("entradas.txt")
+print("Procesando...")
 detector.detectar_señales_directorio('test')
+print("Finalizado.")
 
