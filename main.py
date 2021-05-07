@@ -35,8 +35,8 @@ if __name__ == "__main__":
     # crear mascaras medias
     kernel = cv2.getStructuringElement(cv2.MORPH_RECT, Constants.KERNEL_SIZE)
     detector.setMasks(kernel)
-    detector.generateAverageMasks(args.--train_path,"entradas.txt")
-    detector.detectar_señales_directorio(args.--test_path)
+    detector.generateAverageMasks(vars(args).get("--train_path"),"entradas.txt")
+    detector.detectar_señales_directorio(vars(args).get("--test_path"))
 
     # Evaluate sign detections
 
