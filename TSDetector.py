@@ -9,6 +9,7 @@ from TransportSignal import TransportSignal
 import matplotlib.pyplot as plt
 from PIL import Image
 import Constants
+from ProgressBar import printProgressBar
 
 
 class TSDetector:
@@ -71,8 +72,14 @@ class TSDetector:
 
         # calcular mascara media
         self.avg_dmask.generateAVGMask();  # peligro
+        #plt.imshow(self.avg_dmask.getValue())
+        #plt.show()
         self.avg_pmask.generateAVGMask();  # prohibición
+        #plt.imshow(self.avg_pmask.getValue())
+        #plt.show()
         self.avg_smask.generateAVGMask();  # stop
+        #plt.imshow(self.avg_smask.getValue())
+        #plt.show()
         f.close();
 
     # calcular area
@@ -126,8 +133,13 @@ class TSDetector:
         output_file = open(Constants.RESULTS_FILE, "w")
         output_type_file = open(Constants.RESULTS_TYPE_FILE, "w")
         
+        i = 0
+        total = len(imagenes_test)
         # detectar las señales de cada imagen, generar salida y marcar la detección
         for imagen in imagenes_test:
+            i += 1
+            printProgressBar(i, total, prefix='Progreso:', suffix='completado', length=50)
+            
             # obtener la imagen
             image_path = os.path.join(dir_imagenes, imagen)
             
