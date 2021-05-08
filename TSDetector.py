@@ -50,11 +50,11 @@ class TSDetector:
                 tipo = int(tipo)
                 # añadir imagen
                 if tipo == int(self.avg_pmask.getType().value):
-                    self.avg_pmask.add_learning_image(resized_image);
+                    self.avg_pmask.add_learning_image(resized_image)
                 elif tipo == int(self.avg_dmask.getType().value):
-                    self.avg_dmask.add_learning_image(resized_image);
+                    self.avg_dmask.add_learning_image(resized_image)
                 elif tipo == int(self.avg_smask.getType().value):
-                    self.avg_smask.add_learning_image(resized_image);
+                    self.avg_smask.add_learning_image(resized_image)
 
     # carga las imagenes segun el entradas.txt y genera la mascara media de las tres señales
     def generateAverageMasks(self, dir_path, file_path):
@@ -72,14 +72,14 @@ class TSDetector:
 
         # calcular mascara media
         self.avg_dmask.generateAVGMask();  # peligro
-        #plt.imshow(self.avg_dmask.getValue())
-        #plt.show()
+        plt.imshow(self.avg_dmask.getValue())
+        plt.show()
         self.avg_pmask.generateAVGMask();  # prohibición
-        #plt.imshow(self.avg_pmask.getValue())
-        #plt.show()
+        plt.imshow(self.avg_pmask.getValue())
+        plt.show()
         self.avg_smask.generateAVGMask();  # stop
-        #plt.imshow(self.avg_smask.getValue())
-        #plt.show()
+        plt.imshow(self.avg_smask.getValue())
+        plt.show()
         f.close();
 
     # calcular area

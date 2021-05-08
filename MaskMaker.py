@@ -21,8 +21,8 @@ class MaskMaker:
         #self.addHSVRange(np.array([150, 50, 30]), np.array([180, 255, 255]));
         #self.addHSVRange(np.array([0, 70, 30]), np.array([10, 255, 255]));
         #COLORES MAS ADMISIVOS:
-        self.addHSVRange(np.array([150, 0, 0]), np.array([180, 255, 255]));
-        self.addHSVRange(np.array([0, 0, 0]), np.array([10, 255, 255]));
+        self.addHSVRange(np.array([150, 0, 0]), np.array([180, 255, 255]))
+        self.addHSVRange(np.array([0, 0, 0]), np.array([10, 255, 255]))
 
     def addHSVRange(self, low_range, high_range):
         self.ranges.append((low_range, high_range));
@@ -32,6 +32,6 @@ class MaskMaker:
         mask = np.zeros((self.dim_x, self.dim_y));
         for min_range, max_range in self.ranges:
             mask += cv2.inRange(hsv_image, min_range, max_range);
-        return mask;
+        return mask
 
 
