@@ -4,11 +4,11 @@ import cv2
 
 class MaskMaker:
     def __init__(self, kernel, dim_x, dim_y):
-        self.kernel = kernel;
-        self.dim_x = dim_x;
-        self.dim_y = dim_y;
-        self.ranges = [];
-        self.__setRedColor();
+        self.kernel = kernel
+        self.dim_x = dim_x
+        self.dim_y = dim_y
+        self.ranges = []
+        self.__setRedColor()
 
     # inicializar rango de colores a rojo
     def __setRedColor(self):
@@ -24,5 +24,3 @@ class MaskMaker:
         for min_range, max_range in self.ranges:
             mask += cv2.inRange(hsv_image, min_range, max_range)
         return mask
-
-
