@@ -1,5 +1,4 @@
 import argparse
-
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
@@ -24,7 +23,7 @@ if __name__ == "__main__":
 
     print("Aviso: Para que el programa funcione correctamente debe incluir el fichero entrada.txt proporcionado con la entrega en la carpeta raiz del proyecto!")
     
-    detector = TSDetector(Constants.DIM_X, Constants.DIM_Y, 0.5)
+    detector = TSDetector(Constants.DIM_X, Constants.DIM_Y, Constants.MIN_MATCH_RATE)
     # inicializar mser
     # delta 5, variation 1, area 2000
     delta = Constants.MSER_DELTA
