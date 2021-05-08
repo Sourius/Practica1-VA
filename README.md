@@ -1,9 +1,16 @@
 # Detección de señales
 ## Introducción
-Se ha implementado un detector de señales de tráfico (3 tipos: prohibición, peligro, stop) con el detector MSER. A partir de un directorio con imágenes de entrenamiento, se procesan las imágenes para detectar imágenes similares. A partir de un directorio de prueba, se procesan las imágenes para detectar las señales presentes en las mismas. El programa da como salida: un archivo de texto con información acerca de las detecciones (posición de la señal dentro de la imagen, acierto al reconocer la señal), un archivo de texto que contiene la misma información que el mencionado anteriormente e incluye el tipo de señal detectada (1: prohibición, 2: peligro, 3: stop) y un directorio con las imágenes que contienen las detecciones enmarcadas.
+<p>
+Se ha implementado un detector de señales de tráfico (3 tipos: prohibición, peligro, stop) con el detector MSER. 
+
+- A partir de un directorio con imágenes de entrenamiento, se procesan las imágenes para detectar imágenes similares.
+- A partir de un directorio de prueba, se procesan las imágenes para detectar las señales presentes en las mismas. 
+ 
+El programa da como salida: un archivo de texto con información acerca de las detecciones (posición de la señal dentro de la imagen, acierto al reconocer la señal), un archivo de texto que contiene la misma información que el mencionado anteriormente e incluye el tipo de señal detectada (1: prohibición, 2: peligro, 3: stop) y un directorio con las imágenes que contienen las detecciones enmarcadas.
 
 ## Funcionamiento
-Para poner en marcha el detector, se debe ejecutar el programa principal (main.py) con 3 argumentos: train_path (directorio donde se ubican las imágenes de entrenamiento, por defecto: train_recortadas), test_path (directorio donde se encuentran las imágenes de prueba, por defecto: test), detector. Hemos implementado un único detector, por lo tanto, no es necesario pasarle el tercer parámetro (detector) a la hora de ejecutar el programa. 
+Para poner en marcha el detector, se debe ejecutar el programa principal (main.py) con 3 argumentos: train_path (directorio donde se ubican las imágenes de entrenamiento, por defecto: train_recortadas), test_path (directorio donde se encuentran las imágenes de prueba, por defecto: test), detector. Hemos implementado un único detector, por lo tanto, no es necesario pasarle el tercer parámetro (detector) a la hora de ejecutar el programa.
+
 Para que el programa funcione correctamente hay que añadir el fichero entradas.txt que contiene los nombres de los directorios con cada tipo de señal a detectar y define en qué subdirectorios están las imágenes de cada tipo de señal (por ejemplo: “1;00;01;02”, indica que las imágenes de las señales de tipo 1, se encuentran en el subdirectorio 00, 01, y 02  del directorio de entrenamiento). 
 
 <!--
