@@ -21,28 +21,21 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    print("Aviso: Para que el programa funcione correctamente debe incluir el fichero entrada.txt proporcionado con la entrega en la carpeta raiz del proyecto!")
+    print("Aviso: Para que el programa funcione correctamente debe incluir el fichero entrada.txt proporcionado con "
+          "la entrega en la carpeta raiz del proyecto!")
     
-    detector = TSDetector(Constants.DIM_X, Constants.DIM_Y, Constants.MIN_MATCH_RATE)
     # inicializar mser
     # delta 5, variation 1, area 2000
     delta = Constants.MSER_DELTA
     variation = Constants.MSER_VARIATION
     area = Constants.MSER_MIN_AREA
-    detector.setMSER(delta, variation, area)
-
     # crear mascaras medias
     kernel = cv2.getStructuringElement(cv2.MORPH_RECT, Constants.KERNEL_SIZE)
-    detector.setMasks(kernel)
+    detector = TSDetector(kernel, Constants.DIM_X, Constants.DIM_Y, Constants.MIN_MATCH_RATE, delta, variation, area)
     print("Entrenando...")
     detector.generateAverageMasks(args.train_path, "entradas.txt")
     print("Procesando imagenes...")
-    detector.detectar_señales_directorio(args.test_path)
+    detector.detectar_senales_directorio(args.test_path)
     print("Imagenes procesadas.")
     
     # Evaluate sign detections
-
-
-
-
-

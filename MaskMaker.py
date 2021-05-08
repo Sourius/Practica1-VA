@@ -12,26 +12,17 @@ class MaskMaker:
 
     # inicializar rango de colores a rojo
     def __setRedColor(self):
-        # posibles valores de los rojo
-        # H 0 a 10 y 160 a 180 en openCV
-        # S >= 40
-        # V >= 30
-        #COLORES MAS RESTRICTIVOS:
-        #self.addHSVRange(np.array([0, 25, 0]), np.array([10, 125, 50]));
-        #self.addHSVRange(np.array([150, 50, 30]), np.array([180, 255, 255]));
-        #self.addHSVRange(np.array([0, 70, 30]), np.array([10, 255, 255]));
-        #COLORES MAS ADMISIVOS:
         self.addHSVRange(np.array([150, 0, 0]), np.array([180, 255, 255]))
         self.addHSVRange(np.array([0, 0, 0]), np.array([10, 255, 255]))
 
     def addHSVRange(self, low_range, high_range):
-        self.ranges.append((low_range, high_range));
+        self.ranges.append((low_range, high_range))
 
     def getMask(self, image):
-        hsv_image = cv2.cvtColor(image.copy(), cv2.COLOR_BGR2HSV);
-        mask = np.zeros((self.dim_x, self.dim_y));
+        hsv_image = cv2.cvtColor(image.copy(), cv2.COLOR_BGR2HSV)
+        mask = np.zeros((self.dim_x, self.dim_y))
         for min_range, max_range in self.ranges:
-            mask += cv2.inRange(hsv_image, min_range, max_range);
+            mask += cv2.inRange(hsv_image, min_range, max_range)
         return mask
 
 

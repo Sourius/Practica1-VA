@@ -6,9 +6,6 @@ from random import random
 
 class MSERDetector:
     def __init__(self, delta, variation, area):
-        self.setMSER(delta, variation, area)
-
-    def setMSER(self, delta, variation, area):
         self.mser = cv2.MSER_create(_delta=delta, _max_variation=variation, _max_area=area)
 
     # APLICAR MSER
@@ -16,8 +13,7 @@ class MSERDetector:
         interest_regions = np.zeros((img.shape[0], img.shape[1], 3), dtype=np.uint8)
         return self.mser.detectRegions(img)
 
-        # RECORTAR
-
+    # RECORTAR
     def __cropRegion(self, polygon, img):
         x, y, w, h = cv2.boundingRect(polygon)
         ratio_margin = 0.1  #  margen de proporcion
@@ -43,7 +39,7 @@ class MSERDetector:
                     y2 = y + h
                     x1 = x
                     x2 = x + w
-                return (y1, y2, x1, x2)
+                return y1, y2, x1, x2
 
     def __getRandomColor(self):
         colorRGB = hsv_to_rgb(random(), 1, 1)
@@ -56,7 +52,7 @@ class MSERDetector:
         polygons = self.__detectRegions(img);
         for polygon in polygons[0]:
             region_cropped = self.__cropRegion(polygon, img)
-            if (region_cropped is not None):
+            if region_cropped is not None:
                 interest_regions.append(region_cropped)
             img_regions = cv2.fillPoly(img_regions, [polygon], self.__getRandomColor())
         return img_regions, interest_regions
