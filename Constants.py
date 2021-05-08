@@ -5,6 +5,7 @@ DIM_X = 50
 DIM_Y = 50
 KERNEL_SIZE = 3, 3
 MIN_MATCH_RATE = 0.30  # TASA DE ACIERTO [0-1]
+LEARNING_LOCATIONS_TXT = "entradas.txt"
 RESULTS_DIR = "resultado_imgs"
 RESULTS_FILE = "resultado.txt"
 RESULTS_TYPE_FILE = "resultado_por_tipo.txt"
