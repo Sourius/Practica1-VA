@@ -12,8 +12,8 @@ class MaskMaker:
 
     # inicializar rango de colores a rojo
     def __setRedColor(self):
-        self.addHSVRange(np.array([150, 0, 0]), np.array([180, 255, 255]))
-        self.addHSVRange(np.array([0, 0, 0]), np.array([10, 255, 255]))
+        self.addHSVRange(np.array([160, 40, 10]), np.array([180, 255, 255]))
+        self.addHSVRange(np.array([0, 40, 10]), np.array([10, 255, 255]))
 
     def addHSVRange(self, low_range, high_range):
         self.ranges.append((low_range, high_range))
