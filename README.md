@@ -9,16 +9,25 @@ Se ha implementado un detector de señales de tráfico (3 tipos: prohibición, p
 El programa da como salida: un archivo de texto con información acerca de las detecciones (posición de la señal dentro de la imagen, acierto al reconocer la señal), un archivo de texto que contiene la misma información que el mencionado anteriormente e incluye el tipo de señal detectada (1: prohibición, 2: peligro, 3: stop) y un directorio con las imágenes que contienen las detecciones enmarcadas.
 
 ## Funcionamiento
+### Ejecución
 Para poner en marcha el detector, se debe ejecutar el programa principal (main.py) con 3 argumentos: train_path (directorio donde se ubican las imágenes de entrenamiento, por defecto: train_recortadas), test_path (directorio donde se encuentran las imágenes de prueba, por defecto: test), detector. Hemos implementado un único detector, por lo tanto, no es necesario pasarle el tercer parámetro (detector) a la hora de ejecutar el programa.
 
-Para que el programa funcione correctamente hay que añadir el fichero entradas.txt que contiene los nombres de los directorios con cada tipo de señal a detectar y define en qué subdirectorios están las imágenes de cada tipo de señal (por ejemplo: “1;00;01;02”, indica que las imágenes de las señales de tipo 1, se encuentran en el subdirectorio 00, 01, y 02  del directorio de entrenamiento). 
+### Implementación
+El detector se ha implementado utilizando programación orientada a objetos con python. El detector se compone de las siguientes clases:
+- MserDetector: Se utiliza para detectar y obtener las regiones que hay en una imagen.
+- MaskMaker: Se utiliza para obtener la máscara de una imagen.
+- AverageMask: Representa una máscara media. Cada máscara media se distingue de la otra con el valor de TSType.
+- TSType: Representa cada tipo de señal 1 “Prohibición”, 2 “Peligro” y 3 “Stop”.
+- TransportSignal: Representa las detecciones. Se utiliza para guardar información de cada detección.
+- TSDetector: Contiene toda la funcionalidad necesaria. Utiliza internamente las otras clases y permite analizar las señales a partir de un directorio y genera las salidas.
+- ProgressBar: Se utiliza para mostrar cómo va el proceso de análisis por la consola.
 
-<!--
-// explicar las clases
-// añadir imágenes de ejecución
--->
+Para más información pueden consultar el código.
 
-### Calcular la mascara media a partir de las imágenes de entrenamiento
+#### Cálculo de la mascara media
+Para calcular las máscaras medias se utiliza el fichero entradas.txt que contiene los nombres de los directorios con cada tipo de señal a detectar (por ejemplo: “1;00;01;02”, indica que las imágenes de las señales de tipo 1, se encuentran en el subdirectorio 00, 01, y 02  del directorio de entrenamiento). 
+
+A partir de esta información se obtienen las imágenes de entrenamiento que están ubicadas en el train_path.
 - Por cada imagen de entrenamiento:
   - Se carga la imagen
     - Se obtiene la máscara de color rojo de la imagen
@@ -28,7 +37,8 @@ Para que el programa funcione correctamente hay que añadir el fichero entradas.
     - Se filtran las posiciones más repetidas (mayor aparición que la media)
     - Se aplica una apertura para limpiar la máscara
 
-### Detectar señal de cada imagen del directorio de test
+#### Detectar señal de cada imagen del directorio de test
+A partir de test_path se obtienen las imágenes de prueba.
 - Por cada imagen:
   - Detectar las regiones aplicando con el detector de regiones MSER y filtrarlas dependiendo de su relación entre la altura y la anchura.
   - Calcular la máscara de color la imagen
@@ -49,8 +59,9 @@ Para que el programa funcione correctamente hay que añadir el fichero entradas.
 - cv2.imwrite(image_save_dir, img_color_rectangle): para guardar la imagen con las detecciones enmarcadas
 - cv2.equalizeHist(img_gray): para obtener la imagen ecualizada (amplia los valores del histograma) y detectar mejor las regiones con el mser
 
-<!--
 ## Estadísticas de funcionamiento
-// google sheets
--->
+Las estadísticas siguientes han sido generadas con las detecciones que han superado el 35% de parecido con las máscaras medias calculadas.
 
+![image](https://user-images.githubusercontent.com/47939220/118286754-18aca980-b4d3-11eb-9959-bd600a2c90a2.png)
+
+![image](https://user-images.githubusercontent.com/47939220/118286835-2a8e4c80-b4d3-11eb-8f4f-b203bebc596e.png)
