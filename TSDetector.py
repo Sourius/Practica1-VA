@@ -29,7 +29,24 @@ class TSDetector:
     def addColorRange(self, lower, higher):
         self.generador.addHSVRange(lower, higher)
 
-    def __loadLearningImages(self, dir_path, tipo):
+    def __addLearningImage(self, image_path, tipo:int, region):
+        # obtener imagen
+        original = cv2.imread(image_path, 1)
+        if region is not None:
+            x1,y1,x2,y2 = region
+            original = original[y1:y2, x1:x2]
+            
+        # redimensionar
+        resized_image = cv2.resize(original, (self.dim_x, self.dim_y))
+        # añadir imagen
+        if tipo == int(self.avg_pmask.getType().value):
+            self.avg_pmask.add_learning_image(resized_image)
+        elif tipo == int(self.avg_dmask.getType().value):
+            self.avg_dmask.add_learning_image(resized_image)
+        elif tipo == int(self.avg_smask.getType().value):
+            self.avg_smask.add_learning_image(resized_image)
+
+    def __loadLearningImages(self, dir_path, tipo:int):
         # obtener lista de ficheros
         ficheros = os.listdir(dir_path)
         for fichero in ficheros:
@@ -37,17 +54,7 @@ class TSDetector:
             image_path = os.path.join(dir_path, fichero)
 
             if os.path.isfile(image_path) and fichero.endswith('.ppm'):
-                # obtener imagen y redimensionar
-                original = cv2.imread(image_path, 1)
-                resized_image = cv2.resize(original, (self.dim_x, self.dim_y))
-                tipo = int(tipo)
-                # añadir imagen
-                if tipo == int(self.avg_pmask.getType().value):
-                    self.avg_pmask.add_learning_image(resized_image)
-                elif tipo == int(self.avg_dmask.getType().value):
-                    self.avg_dmask.add_learning_image(resized_image)
-                elif tipo == int(self.avg_smask.getType().value):
-                    self.avg_smask.add_learning_image(resized_image)
+                self.__addLearningImage(image_path, tipo, None);
 
     # carga las imagenes segun el entradas.txt y genera la mascara media de las tres señales
     def generateAverageMasks(self, dir_path, file_path):
@@ -62,6 +69,38 @@ class TSDetector:
             for i in range(1, len(ficheros)):
                 file_path = os.path.join(dir_path, ficheros[i].strip())
                 self.__loadLearningImages(file_path, tipo)
+
+        # calcular mascara media
+        self.avg_dmask.generateAVGMask()  # peligro
+        self.avg_pmask.generateAVGMask()  # prohibición
+        self.avg_smask.generateAVGMask()  # stop
+        f.close()
+
+    def generateAVGMasks(self, dir_path):
+        file_path = os.path.join(dir_path, "gt.txt");
+        f = open(file_path, mode='r', encoding='utf-8')
+        
+        for line in f:
+            # obtener tipo
+            signals = line.split(";")
+            tipo = signals[-1] - 1 # 42 tipos
+            
+            # convertir el tipo que esta en 42 a 3
+            if tipo == 14:
+                tipo = 3
+            elif (tipo >= 18 and tipo <= 31) or (tipo == 11):
+                tipo = 2
+            elif (tipo >= 0 and tipo <= 10) or (tipo >= 15 and tipo <= 16):
+                tipo = 1
+            else:
+                # no es ninguna de las tres, no se utiliza para la mascara media
+                # solo añadiria ruido a la mascara media
+                continue
+            
+            # obtener region
+            region = signals[1], signals[2], signals[3], signals[4]
+            image_path = os.path.join(dir_path, signals[0].strip())
+            self.__addLearningImage(image_path, tipo, region)
 
         # calcular mascara media
         self.avg_dmask.generateAVGMask()  # peligro
@@ -170,12 +209,12 @@ class TSDetector:
             match_rates_scores = np.array([self.getMatchRate(mask, avg_mask) for avg_mask in average_masks])
             match_rates = np.array([mrs[0] for mrs in match_rates_scores])
             scores = np.array([mrs[1] for mrs in match_rates_scores])
+            
             tipo = scores.argmax()  # el tipo se definira segun la mascara mas grande
             match_rate = match_rates[tipo]
 
             if match_rate >= self.min_match_rate:
-                addSignal, indice, mejor_parecido = self.__obtener_mejor_parecido(region, match_rate,
-                                                                                  detecciones)  # utilizar diccionario
+                addSignal, indice, mejor_parecido = self.__obtener_mejor_parecido(region, match_rate, detecciones)  # utilizar diccionario
                 tsType = TSType(tipo + 1)
                 ts = TransportSignal(tsType, mejor_parecido[1], os.path.basename(img_path), mejor_parecido[0])
                 if indice == -1:

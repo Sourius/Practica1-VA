@@ -33,7 +33,10 @@ if __name__ == "__main__":
     kernel = cv2.getStructuringElement(cv2.MORPH_RECT, Constants.KERNEL_SIZE)
     detector = TSDetector(kernel, Constants.DIM_X, Constants.DIM_Y, Constants.MIN_MATCH_RATE, delta, variation, area)
     print("Entrenando...")
-    detector.generateAverageMasks(args.train_path, Constants.LEARNING_LOCATIONS_TXT)
+    if args.train_path == "train_recortadas":
+        detector.generateAverageMasks(args.train_path, Constants.LEARNING_LOCATIONS_TXT)
+    else:
+        detector.generateAverageMasks(args.train_path)
     print("Procesando imagenes...")
     detector.detectar_senales_directorio(args.test_path)
     print("Imagenes procesadas.")
