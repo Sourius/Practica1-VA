@@ -1,7 +1,6 @@
 import numpy as np
 import cv2
 
-
 class MaskMaker:
     def __init__(self, kernel, dim_x, dim_y):
         self.kernel = kernel
