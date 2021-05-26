@@ -1,5 +1,5 @@
-# Print iterations progress
-# https://stackoverflow.com/questions/3173320/text-progress-bar-in-the-console
+# muestra como va el proceso de la deteccion de las señales de las imagenes
+# codigo obtenido de https://stackoverflow.com/questions/3173320/text-progress-bar-in-the-console
 def printProgressBar(iteration, total, prefix='', suffix='', decimals=1, length=100, fill='█', printEnd="\r"):
     """
     Call in a loop to create terminal progress bar
@@ -17,6 +17,5 @@ def printProgressBar(iteration, total, prefix='', suffix='', decimals=1, length=
     filledLength = int(length * iteration // total)
     bar = fill * filledLength + '-' * (length - filledLength)
     print(f'\r{prefix} |{bar}| {percent}% {suffix}', end=printEnd)
-    # Print New Line on Complete
     if iteration == total:
         print()
