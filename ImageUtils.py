@@ -2,7 +2,7 @@ import os
 import cv2
 import Constants
 
-# devuelve la imagen en gbr
+# devuelve la imagen en bgr
 # recibe la ruta de imagen a leer
 def read(image_path):
     return cv2.imread(image_path, 1)

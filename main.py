@@ -17,4 +17,4 @@ if __name__ == "__main__":
     detector.detect_from_dir(args.test_path) # detectar señales de trafico
     print("Imagenes procesadas.")
 
-    # Evaluate sign detections --> hecho en la hoja de calculo con las estadisticas que se proporciona en la entrega
+    #Evaluar detecciones --> ver en la memoria
